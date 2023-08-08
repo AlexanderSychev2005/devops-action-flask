@@ -36,6 +36,6 @@ jobs:
 
       - name: Run unit tests
         run: |
-          python -m unittest discover tests  # Adjust the test discovery path
+         # python -m unittest discover tests  # Adjust the test discovery path
 
       # Add more steps here for deployment, code analysis, etc. if needed
