@@ -4,6 +4,10 @@ on:
   push:
     branches:
       - main  # Adjust this branch name as needed
+  pull_request:
+    types:
+      - opened
+      - synchronize
   workflow_dispatch:  # Manual run
 
 jobs:
@@ -36,4 +40,3 @@ jobs:
           python -m unittest discover tests  # Adjust the test discovery path
 
       # Add more steps here for deployment, code analysis, etc. if needed
-
