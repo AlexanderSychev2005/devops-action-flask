@@ -3,16 +3,16 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - main  # Adjust this branch name as needed
+      - main  
   pull_request:
     types:
       - opened
       - synchronize
-  workflow_dispatch:  # Manual run
+  workflow_dispatch:  
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # You can choose a different OS if needed
+    runs-on: ubuntu-latest  
 
     steps:
       - name: Checkout code
@@ -21,7 +21,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: 3.8  # Choose the desired Python version
+          python-version: 3.8  
 
       - name: Install dependencies
         run: |
