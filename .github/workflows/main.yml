@@ -3,37 +3,37 @@ name: Continuous Integration
 on:
   push:
     branches:
-      - main  # Replace with your branch name
+      - main  # Adjust this branch name as needed
+  workflow_dispatch:  # Manual run
 
 jobs:
   build:
     runs-on: ubuntu-latest  # You can choose a different OS if needed
 
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x  # Specify the Python version you need
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8  # Choose the desired Python version
 
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt  # Adjust if your dependencies are in a different file
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt  # Adjust the filename as needed
 
-    - name: Run Unit Tests
-      run: |
-        pytest  # Replace with your unit testing command
+      - name: Build Flask app
+        run: |
+          python app.py
+          # Replace this with the actual command to build your Flask app
+          # For example, if you use a script like "app.py", run: python app.py
+          python app_build_script.py  # Adjust the script name as needed
 
-    - name: Build Project
-      run: |
-        # Add build steps here if necessary
+      - name: Run unit tests
+        run: |
+          python -m unittest discover tests  # Adjust the test discovery path
 
-    - name: Manual Mode Trigger
-      if: github.event_name == 'workflow_dispatch'
-      run: |
-        # Add manual mode commands here
+      # Add more steps here for deployment, code analysis, etc. if needed
 
-# Add additional steps or jobs as needed
