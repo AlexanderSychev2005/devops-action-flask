@@ -30,16 +30,8 @@ jobs:
           restore-keys: ${{ runner.os }}-pip
       - name: Install Dependencies
         run: pip install -r requirements.txt # Adjust this command based on your project setup
-      - name: Download and Set up Sonar Scanner
+      - name: Run Sonar Scanner
         run: |
-          curl -o sonar-scanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.0.2311-linux.zip
-          unzip sonar-scanner.zip
-          chmod +x sonar-scanner/bin/sonar-scanner
-      - name: Add Sonar Scanner to PATH
-        run: echo "PATH=\$PATH:$PWD/sonar-scanner/bin" >> $GITHUB_ENV
-      - name: Build and analyze
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: sonar-scanner # Adjust this command based on your project setup
+          docker run \
+            --rm \
+            -e SONAR_TOKEN=${{ secrets.SONAR_TOKEN }} \
