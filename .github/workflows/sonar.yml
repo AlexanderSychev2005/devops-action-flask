@@ -1,0 +1,38 @@
+name: Sonar
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main # the name of your main branch
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  build:
+    name: Analysis
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 # Use the version of Python required for your project
+      - name: Cache SonarQube packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
+      - name: Cache Pip packages
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip
+      - name: Install Dependencies
+        run: pip install -r requirements.txt # Adjust this command based on your project setup
+      - name: Build and analyze
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        run: sonar-scanner # Adjust this command based on your project setup
