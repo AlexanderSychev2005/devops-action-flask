@@ -13,17 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8 # Use the version of Python required for your project
+      
       - name: Cache SonarQube packages
         uses: actions/cache@v2
         with:
           path: ~/.sonar/cache
           key: ${{ runner.os }}-sonar
           restore-keys: ${{ runner.os }}-sonar
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: 3.8 # Use the version of Python required for your project
       
       - name: Cache Pip packages
         uses: actions/cache@v2
@@ -35,9 +35,13 @@ jobs:
       - name: Install Dependencies
         run: pip install -r requirements.txt # Adjust this command based on your project setup
       
-      - name: Run Sonar Scanner
+      - name: Run SonarQube Analysis
+        uses: sonarcloud/github-action@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-        run: sonar-scanner # Adjust this command based on your project setup
+        with:
+          args: >
+            -Dsonar.projectKey=my_project_key
+            -Dsonar.organization=my_organization
+            -Dsonar.sources=.
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
