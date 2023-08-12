@@ -1,47 +1,26 @@
-name: Sonar
+name: Build
+
 on:
-  workflow_dispatch:
   push:
     branches:
-      - main # the name of your main branch
-  pull_request:
-    types: [opened, synchronize, reopened]
+      - main
+
+
 jobs:
   build:
-    name: Analysis
+    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: Set up Python
-        uses: actions/setup-python@v2
         with:
-          python-version: 3.8 # Use the version of Python required for your project
-      
-      - name: Cache SonarQube packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      
-      - name: Cache Pip packages
-        uses: actions/cache@v2
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: ${{ runner.os }}-pip
-      
-      - name: Install Dependencies
-        run: pip install -r requirements.txt # Adjust this command based on your project setup
-      
-      - name: Run SonarQube Analysis
-        uses: sonarcloud/github-action@v1
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=my_project_key
-            -Dsonar.organization=my_organization
-            -Dsonar.sources=.
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+      # If you wish to fail your job when the Quality Gate is red, uncomment the
+      # following lines. This would typically be used to fail a deployment.
+      # - uses: sonarsource/sonarqube-quality-gate-action@master
+      #   timeout-minutes: 5
+      #   env:
+      #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
