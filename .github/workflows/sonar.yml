@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main  # Change this to your default branch name
-  pull_request:
-    branches:
-      - main  # Change this to your default branch name
-
 jobs:
   sonarqube:
     runs-on: ubuntu-latest
