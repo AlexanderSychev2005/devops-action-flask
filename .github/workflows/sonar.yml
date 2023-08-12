@@ -32,10 +32,10 @@ jobs:
 
     - name: SonarQube Analysis
       env:
-        SONAR_TOKEN: ${{ sqp_32782c806de009a10a0aedc09ca8c29179908363 }}
-        SONAR_HOST_URL: http://localhost:9099  # Update with your SonarQube local instance URL
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}  # Update with your SonarQube local instance URL
       run: |
         sonar-scanner \
           -Dsonar.host.url=$SONAR_HOST_URL \
           -Dsonar.login=$SONAR_TOKEN \
-          -Dsonar.projectKey=Python_Flask  # Replace with your SonarQube project key
+          -Dsonar.projectKey=Python_Flask  
