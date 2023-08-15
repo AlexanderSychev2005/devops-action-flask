@@ -1,0 +1,3 @@
+http://23.100.12.106 {
+    reverse_proxy localhost:5000
+}
